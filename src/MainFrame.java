@@ -21,12 +21,10 @@ import java.io.IOException;
  * This is the main GUI components in the game.
  */
 public class MainFrame extends JFrame implements MouseListener {
-    int x;
-    int y;
-    int flag = 1;//flag controls which chess will go. 1 is black, 2 is white. The default choice is 1.
+    int x, y, flag = 1;//flag controls which chess will go. 1 is black, 2 is white. The default choice is 1.
+    int chessSum = 0;//Total numbers of chess.
+    int[][] allChess = new int[19][19];//Coordinates of all chess. 0: no chess; 1: black; 2: white.
     boolean canPlay = true;//Controls whether the game can continue.
-    int[][] allChess = new int[19][19];//Coordinates of all chesses. 0: no chess; 1: black; 2: white.
-    int chessSum = 0;//Total numbers of chesses.
     BufferedImage bgImage = null;//Background image
 
     JButton withdraw = new JButton("Withdraw");
@@ -69,6 +67,7 @@ public class MainFrame extends JFrame implements MouseListener {
         //Show all components in SOUTH
     }
 
+    @Override
     public void paint(Graphics g){
         g.drawImage(bgImage,8, 30, this);
         for (int colum = 58; colum < 600; colum += 30){
@@ -115,6 +114,7 @@ public class MainFrame extends JFrame implements MouseListener {
         //System.out.println("Total sum is " + (chessSum - 1));
     }
 
+    @Override
     public void mouseClicked(MouseEvent event){
         x = event.getX();
         y = event.getY();
@@ -154,127 +154,95 @@ public class MainFrame extends JFrame implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {}
 
-    public void checkFive(){
+    public void checkFive() throws ArrayIndexOutOfBoundsException {
         int color = allChess[x][y];//Save the color of chess which will be actioned.
         int count = 1;//Chess counter init
 
         for (int i = 1;i < 5;i++){//Check whether the RIGHT side is continuous five chess
-            try {
-                if (x >= 15) {//Check whether the distance to border is less than 5
-                    break;
-                }
-                if (color == allChess[x + i][y]) {
-                    count++;
-                }
-                checkWin(count);
-            } catch(ArrayIndexOutOfBoundsException ignored){
-                ignored.printStackTrace();
+            if (x >= 15) {//Check whether the distance to border is less than 5
+                break;
             }
+            if (color == allChess[x + i][y]) {
+                count++;
+            }
+            checkWin(count);
         }
         count = 1;
 
         for (int i = 1;i < 5;i++){//Check whether the LEFT side is continuous five chess
-            try{
-                if (x <= 3){//Check whether the distance to border is less than 5
-                    break;
-                }
-                if (color == allChess[x - i][y]){
-                    count++;
-                }
-                checkWin(count);
-            } catch(ArrayIndexOutOfBoundsException ignored){
-                ignored.printStackTrace();
+            if (x <= 3){//Check whether the distance to border is less than 5
+                break;
             }
+            if (color == allChess[x - i][y]){
+                count++;
+            }
+            checkWin(count);
         }
         count = 1;
 
         for (int i = 1;i < 5;i++){//Check whether the LOWer side is continuous five chess
-            try{
-                if (y >= 15){//Check whether the distance to border is less than 5
-                    break;
-                }
-                if (color == allChess[x][y + i]){
-                    count++;
-                }
-                checkWin(count);
-            } catch(ArrayIndexOutOfBoundsException ignored){
-                ignored.printStackTrace();
+            if (y >= 15){//Check whether the distance to border is less than 5
+                break;
             }
+            if (color == allChess[x][y + i]){
+                count++;
+            }
+            checkWin(count);
         }
         count = 1;
 
         for (int i = 1;i < 5;i++){//Check whether the UPper side is continuous five chess
-            try {
-                if (y <= 3){//Check whether the distance to border is less than 5
-                    break;
-                }
-                if (color == allChess[x][y - i]){
-                    count++;
-                }
-                checkWin(count);
-            } catch(ArrayIndexOutOfBoundsException ignored){
-                ignored.printStackTrace();
+            if (y <= 3){//Check whether the distance to border is less than 5
+                break;
             }
+            if (color == allChess[x][y - i]){
+                count++;
+            }
+            checkWin(count);
         }
         count = 1;
 
         for (int i = 1;i < 5;i++){//Check whether the RIGHT UPper side is continuous five chess
-            try {
-                if (y <= 3 || x >= 15) {//Check whether the distance to border is less than 5
-                    break;
-                }
-                if (color == allChess[x + i][y - i]) {
-                    count++;
-                }
-                checkWin(count);
-            } catch(ArrayIndexOutOfBoundsException ignored){
-                ignored.printStackTrace();
+            if (y <= 3 || x >= 15) {//Check whether the distance to border is less than 5
+                break;
             }
+            if (color == allChess[x + i][y - i]) {
+                count++;
+            }
+            checkWin(count);
         }
         count = 1;
 
         for (int i = 1;i < 5;i++){//Checking whether the LEFT LOWer side is continuous five chess
-            try{
-                if (x <= 3 || y >= 15){//Check whether the distance to border is less than 5
-                    break;
-                }
-                if (color == allChess[x - i][y + i]){
-                    count++;
-                }
-                checkWin(count);
-            } catch(ArrayIndexOutOfBoundsException ignored){
-                ignored.printStackTrace();
+            if (x <= 3 || y >= 15){//Check whether the distance to border is less than 5
+                break;
             }
+            if (color == allChess[x - i][y + i]){
+                count++;
+            }
+            checkWin(count);
         }
         count = 1;
 
         for (int i = 1;i < 5;i++){//Checking whether the LEFT UPper side is continuous five chess
-            try{
-                if (x <= 3|| y <= 3){//Check whether the distance to border is less than 5
-                    break;
-                }
-                if (color == allChess[x - i][y - i]){
-                    count++;
-                }
-                checkWin(count);
-            } catch(ArrayIndexOutOfBoundsException ignored){
-                ignored.printStackTrace();
+            if (x <= 3|| y <= 3){//Check whether the distance to border is less than 5
+                break;
             }
+            if (color == allChess[x - i][y - i]){
+                count++;
+            }
+            checkWin(count);
         }
         count = 1;
 
         for (int i = 1;i < 5;i++) {//Checking whether the RIGHT LOWer side is continuous five chess
-            try{
-                if (y >= 15 || x >= 15){//Check whether the distance to border is less than 5
-                    break;
-                }
-                if (color == allChess[x + i][y + i]){
-                    count++;
-                }
-                checkWin(count);
-            } catch(ArrayIndexOutOfBoundsException ignored){
-                ignored.printStackTrace();
+            if (y >= 15 || x >= 15){//Check whether the distance to border is less than 5
+                break;
             }
+            if (color == allChess[x + i][y + i]){
+                count++;
+            }
+            checkWin(count);
         }
     }
 
@@ -290,7 +258,7 @@ public class MainFrame extends JFrame implements MouseListener {
             if(allChess[x][y] == 2) {
                 JOptionPane.showMessageDialog(null, "White Win!");
             }
-            canPlay=false;//Game Over
+            canPlay = false;//Game Over
         }
     }
 
